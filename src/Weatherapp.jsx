@@ -2,24 +2,29 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { LuWaves } from "react-icons/lu";
 import { PiCloudSunFill } from "react-icons/pi";
- const API="0d61912f231b5951e8fa430df0597242"
  import { BiWind } from "react-icons/bi";
  import { HiSun } from "react-icons/hi";
  import './weatherapp.css'  
+ const API="0d61912f231b5951e8fa430df0597242"
 function Weatherapp(){
     const [city,setCity]=useState('')
     const [weatherdata,setWeatherdata]=useState(null)
+  
     const [search,setSearch]=useState(false)
     const fetchweatherdata=async()=>{
         try {
             const response=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}`)
             const data=await response.json()
             setSearch(true)
-            setWeatherdata(data)
-        } catch (error) {
-            console.log("Error fetching weather data",error)
-            setWeatherdata(city)
-            setSearch(false)
+            if (data.cod === "404") {
+            setWeatherdata(null); 
+        } else {
+            setWeatherdata(data);
+           
+        } }catch (error) {
+            setWeatherdata(null)
+            
+            setSearch(true)
             
         }
     }
@@ -32,9 +37,12 @@ function Weatherapp(){
         <div className="weathercontainer">
             <div className="searchbox">
                 <input type="text" value={city} onChange={(e)=>setCity(e.target.value)} placeholder="Enter City Name" />
+               
             </div>
+            
             {search &&(
                     <div >
+                            {weatherdata?(
                             <div className="weatherdetails">
                                 <div className="temp">
                                     {(weatherdata?.main?.temp-273.15)?.toFixed(2)}C
@@ -66,8 +74,12 @@ function Weatherapp(){
                                         minute:"2-digit"
                                     })}</p>
                                 </div>
-                            </div>
-                        
+                                
+                            </div>):(
+                                <div className="errormessage">City not found!</div>
+                            )
+                        }
+                         
                     </div>
             )
         }
