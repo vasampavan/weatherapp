@@ -5,7 +5,7 @@ import { PiCloudSunFill } from "react-icons/pi";
  import { BiWind } from "react-icons/bi";
  import { HiSun } from "react-icons/hi";
  import './weatherapp.css'  
- const API="0d61912f231b5951e8fa430df0597242"
+ const API=""
 function Weatherapp(){
     const [city,setCity]=useState('')
     const [weatherdata,setWeatherdata]=useState(null)
